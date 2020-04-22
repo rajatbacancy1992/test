@@ -1,0 +1,39 @@
+$color-primary: #2ac3ff;
+$color-black: #252a30;
+$color-secondary: #666666;
+
+$color-gray: #8a8a8a;
+$color-bglight: #edf1fb;
+
+$color-darkblack: #252a30;
+$color-darkactive: #1c2128;
+
+$color-white: #fff;
+
+$color-graydark: #555;
+$color-graylight: #f6f7f9;
+
+$color-disabledbg: #f9fafb;
+$color-disabledtext: #e8e8e8;
+$color-readonly: #e2e5ec;
+
+.text {
+  &-black {
+    color: $color-black !important;
+  }
+  &-primary {
+    color: $color-primary !important;
+  }
+  &-secondary {
+    color: $color-secondary !important;
+  }
+}
+
+.bg {
+  &-primary {
+    background-color: $color-primary !important;
+    &-hov:hover {
+      background-color: $color-primary !important;
+    }
+  }
+}

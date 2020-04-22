@@ -95,7 +95,8 @@ const Input = props => {
     min,
     id,
     search,
-    max
+    max,
+    isLabel
   } = props;
   const inputProps = {
     type: type,
@@ -148,17 +149,17 @@ const Input = props => {
       } ${prefix && "input-prefix"}`}
     >
       {title ? (
-        <label className="col-form-label">
-          {title}
-          {isReq ? <span className="reqEstric">*</span> : null}
-          {toolInfo && (
-            <ToolTip
-              info={toolInfo}
-              className="toolTip"
-              icon="fa fa-question-circle"
-            />
-          )}
-        </label>
+      isLabel&&  <label className="col-form-label label-md">
+      {title}
+      {isReq ? <span className="reqEstric"> *</span> : null}
+      {toolInfo && (
+        <ToolTip
+          info={toolInfo}
+          className="toolTip"
+          icon="fa fa-question-circle"
+        />
+      )}
+    </label>
       ) : null}
       {reqType === "mobile" ? (
         <NumberFormat
@@ -206,7 +207,8 @@ Input.defaultProps = {
 	value: "",
 	onChangeFunc: () => { },
 	onKeyUpFunc: () => { },
-	loading: null
+  loading: null,
+  isLabel:true
 };
 
 Input.propTypes = {

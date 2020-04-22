@@ -1,0 +1,1 @@
+export {AdminSignUp} from "./SignUp/index"

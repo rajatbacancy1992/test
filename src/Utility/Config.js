@@ -1,0 +1,1 @@
+export const API_URL="http://52.170.38.101:86"

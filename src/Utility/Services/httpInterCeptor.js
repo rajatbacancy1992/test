@@ -1,7 +1,7 @@
 import axios from "axios";
-import { API_URL } from "./Config";
-import { getToken, getServerValidation } from "./Helper";
-import { te } from "./ReduxToaster";
+import { API_URL } from "../Config";
+import { getToken, getServerValidation } from "../Helper";
+import { te } from "../ReduxToaster";
 export const get = (
   url,
   isPrivate = true,
