@@ -1,0 +1,31 @@
+.custom-control {
+  margin-bottom: 0;
+
+  display: flex;
+  min-height: unset;
+  align-items: center;
+  .custom-control-label {
+    line-height: 20px;
+  }
+  cursor: pointer;
+  padding-left: 2rem;
+  .custom-control-label {
+    &::before,
+    &::after {
+      left: -2rem;
+      width: 1.3rem;
+      height: 1.3rem;
+      top: 0rem;
+    }
+    &::before {
+      border-radius: 0;
+      border-color: $color-readonly;
+    }
+  }
+  .custom-control-input:checked ~ .custom-control-label {
+    &::before {
+      background-color: $color-primary;
+      border-color: $color-primary;
+    }
+  }
+}

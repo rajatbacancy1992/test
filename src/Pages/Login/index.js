@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import Input from "../../Components/Common/Input";
 import { cloneDeep } from "lodash";
 import { getFormDetails } from "../../Utility/Helper";
-import { te } from "../../Utility/ReduxToaster";
+import { te, ts } from "../../Utility/ReduxToaster";
 import { post } from "../../Utility/Services/httpInterCeptor";
 import { postLogin } from "../../Utility/Services/Login";
+import {connect} from "react-redux"
+import {syncLogin} from "../../Redux/Action/Login";
+import {Link } from "react-router-dom"
+import { AdminUrl, PublicUrl, UserUrl } from "../../Utility/constant";
 const initLogin = {
   form: {
     username: "",
@@ -13,11 +17,14 @@ const initLogin = {
   },
   loading: false,
   passwordShow: false,
+  keepMeLogin: false,
 };
-export const Login = () => {
+export const LoginComponent = (props) => {
   let [state, setState] = useState({ ...cloneDeep(initLogin) });
-  let { loading, passwordShow } = state;
+  let {syncLogin}=props
+  let { loading, passwordShow, keepMeLogin } = state;
   let { username, password, errors } = state.form;
+
   let onInputChange = (name, value, error = undefined) => {
     const { form } = state;
     form[name] = value;
@@ -48,15 +55,33 @@ export const Login = () => {
         if (res.error) {
           return;
         }
-        console.log(res);
+        if(res.data.status==200)
+        {
+          ts(res.data.message)
+          syncLogin(res)
+          localStorage.setItem("token",res.data.token)
+        }else
+        {
+          te(res.data.message)
+         
+        }
+        state.loading=false;
+       
+        setState({...state})
       });
     }
   };
-  const ResetForm=()=>{
-    setState(cloneDeep(initLogin))
-  }
+  const ResetForm = () => {
+    localStorage.setItem("keepMeLogin",false)
+    setState(cloneDeep(initLogin));
+  };
   const PasswordShow = () => {
     state.passwordShow = !passwordShow;
+    setState({ ...state });
+  };
+  const KeepMeLogin = () => {
+    state.keepMeLogin = !state.keepMeLogin;
+    localStorage.setItem("keepMeLogin",   state.keepMeLogin);
     setState({ ...state });
   };
   return (
@@ -75,14 +100,13 @@ export const Login = () => {
               <div class="logo-block">
                 <img src="images/logo.png" alt="" class="logo-img" />
               </div>
-              <form class="login-form">
+              <form class="login-form" onSubmit={OnSubmit}>
                 <ul class="nav nav-tabs login-as-tabs">
                   <li class="nav-item" onClick={ResetForm}>
                     <a
                       class="nav-link active"
                       data-toggle="tab"
                       href="#as-user"
-
                     >
                       As a User
                     </a>
@@ -98,7 +122,6 @@ export const Login = () => {
                 <div class="tab-content">
                   <div class="tab-pane active" id="as-user">
                     <div class="form-group">
-                     
                       <Input
                         placeholder="Email"
                         title="Email"
@@ -108,7 +131,7 @@ export const Login = () => {
                         value={username}
                         error={errors.username}
                         isReq={true}
-                        reqType="email"
+                        //reqType="email"
                         validationFunc={onInputValidate}
                       />
                     </div>
@@ -116,7 +139,7 @@ export const Login = () => {
                       <label class="label-md">Password *</label>
                       <div class="input-icon-group">
                         <Input
-                        type={passwordShow?"text":"password"}
+                          type={passwordShow ? "text" : "password"}
                           placeholder="Password"
                           title="Password"
                           onChangeFunc={onInputChange}
@@ -130,14 +153,14 @@ export const Login = () => {
                         <a
                           class="ic-eye icon cursor-pointer js-toggle-password"
                           href="javascript:void(0)"
-                        //  data-target="#js-toggle-password"
+                          //  data-target="#js-toggle-password"
                           onClick={PasswordShow}
                         ></a>
                       </div>
                     </div>
                     <div class="form-group double">
-                      <button class="btn btn-primary btn-block text-uppercase login-button">
-                        Login
+                      <button class="btn btn-primary btn-block text-uppercase login-button" disabled={loading}>
+                      {loading?"Please wait...":"Login"} 
                       </button>
                       <div class="form-row align-items-center">
                         <div class="col left">
@@ -148,6 +171,10 @@ export const Login = () => {
                               type="checkbox"
                               name=""
                               value="true"
+                              checked={keepMeLogin}
+                              onClick={() => {
+                                KeepMeLogin();
+                              }}
                             />
                             <span for="my-input" class="custom-control-label">
                               Keep me logged in
@@ -155,20 +182,20 @@ export const Login = () => {
                           </label>
                         </div>
                         <div class="col right">
-                          <a
-                            href="forgot-password.html"
+                          <Link
+                            to={UserUrl.forgot_password}
                             class="text-secondary forgot-text"
                           >
                             {" "}
                             Forgot Password?
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="tab-pane fade" id="as-admin">
                     <div class="form-group">
-                    <Input
+                      <Input
                         placeholder="Email"
                         title="Email"
                         className="form-control"
@@ -177,16 +204,15 @@ export const Login = () => {
                         value={username}
                         error={errors.username}
                         isReq={true}
-                        reqType="email"
+                       // reqType="email"
                         validationFunc={onInputValidate}
                       />
-                   
                     </div>
                     <div class="form-group">
                       <label class="label-md">Password</label>
                       <div class="input-icon-group">
-                      <Input
-                        type={passwordShow?"text":"password"}
+                        <Input
+                          type={passwordShow ? "text" : "password"}
                           placeholder="Password"
                           title="Password"
                           onChangeFunc={onInputChange}
@@ -200,14 +226,14 @@ export const Login = () => {
                         <a
                           class="ic-eye icon cursor-pointer js-toggle-password"
                           href="#!"
-                         // data-target="#js-toggle-password"
-                         onClick={PasswordShow}
+                          // data-target="#js-toggle-password"
+                          onClick={PasswordShow}
                         ></a>
                       </div>
                     </div>
                     <div class="form-group double">
-                      <button class="btn btn-primary btn-block text-uppercase login-button">
-                        Login
+                      <button class="btn btn-primary btn-block text-uppercase login-button" disabled={loading}>
+                     {loading?"Please wait...":"Login"}
                       </button>
                       <div class="form-row align-items-center">
                         <div class="col left">
@@ -218,6 +244,8 @@ export const Login = () => {
                               type="checkbox"
                               name=""
                               value="true"
+                              checked={keepMeLogin}
+                              onClick={KeepMeLogin}
                             />
                             <span for="my-input" class="custom-control-label">
                               Keep me logged in
@@ -225,21 +253,21 @@ export const Login = () => {
                           </label>
                         </div>
                         <div class="col right">
-                          <a
-                            href="forgot-password.html"
+                          <Link
+                            to={AdminUrl.forgot_password}
                             class="text-secondary forgot-text"
                           >
                             {" "}
                             Forgot Password?
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>
                     <p class="new-user-text text-secondary">
                       New User?{" "}
-                      <a href="register.html" class="text-link">
+                      <Link to={AdminUrl.signup} class="text-link">
                         Create Account
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </div>
@@ -253,45 +281,6 @@ export const Login = () => {
       </div>
     </>
   );
-  return (
-    <>
-      {" "}
-      <div className="container border">
-        <form onSubmit={OnSubmit}>
-          <div className="row">
-            <div className="col-lg-12">
-              <Input
-                placeholder="Username or Email address"
-                title="Username or Email Address"
-                className="form-control"
-                onChangeFunc={onInputChange}
-                name="username"
-                value={username}
-                error={errors.username}
-                isReq={true}
-                validationFunc={onInputValidate}
-              />
-            </div>
-            <div className="col-lg-12">
-              <Input
-                placeholder="Password"
-                title="Password"
-                onChangeFunc={onInputChange}
-                name="password"
-                value={password}
-                error={errors.password}
-                isReq={true}
-                validationFunc={onInputValidate}
-              />
-            </div>
-            <div className="col-lg-12 text-center">
-              <button type="submit" className="btn btn-primary">
-                {loading ? "Please wait..." : "Login"}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>{" "}
-    </>
-  );
+ 
 };
+export const Login=connect(state=>state,{syncLogin})(LoginComponent)

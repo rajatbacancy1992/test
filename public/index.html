@@ -46,5 +46,43 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <script>
+      $(window).on("load", function () {
+          setTimeout(function () {
+              $('.loader').fadeOut();
+          }, 1000)
+      })
+      $(".js-toggle-password").click(function (e) {
+          e.preventDefault();
+          if ($($(this).attr('data-target')).attr('type') == 'password') {
+              $($(this).attr('data-target')).attr('type', 'text');
+              $(this).addClass("ic-eye-slash hide-password");
+          }
+          else {
+              $($(this).attr('data-target')).attr('type', 'password');
+              $(this).removeClass("ic-eye-slash hide-password");
+          }
+      })
+      $(".js-pin-navigation").keyup(function (e) {
+          if ($(this).val().length == 1) {
+              $(this).parent().next().find(".input-pin").focus();
+          }
+      })
+      $(".js-pin-navigation").keydown(function (e) {
+          if (e.keyCode == 8) {
+              if (!$(this).val()) {
+                  $(this).parent().prev().find(".input-pin").focus();
+              }
+          }
+      })
+  </script>
+  <script>
+      $(".js-show-otp-block").click(function (e) {
+          e.preventDefault();
+          $(this).parent().slideUp(100);
+          $($(this).attr("data-target")).slideDown();
+      })
+  </script>
   </body>
 </html>

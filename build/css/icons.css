@@ -1,0 +1,88 @@
+@font-face {
+  font-family: "QUARKZA";
+  src: url("../fonts/QUARKZA.eot?koo89f");
+  src: url("../fonts/QUARKZA.eot?koo89f#iefix") format("embedded-opentype"),
+    url("../fonts/QUARKZA.ttf?koo89f") format("truetype"),
+    url("../fonts/QUARKZA.woff?koo89f") format("woff"),
+    url("../fonts/QUARKZA.svg?koo89f#QUARKZA") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="ic-"],
+[class*=" ic-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "QUARKZA" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ic-angle-down:before {
+  content: "\e900";
+}
+.ic-angle-left:before {
+  content: "\e901";
+}
+.ic-angle-right:before {
+  content: "\e902";
+}
+.ic-angle-up:before {
+  content: "\e903";
+}
+.ic-arrow-left:before {
+  content: "\e904";
+}
+.ic-arrow-right:before {
+  content: "\e905";
+}
+.ic-bell:before {
+  content: "\e906";
+}
+.ic-calendar:before {
+  content: "\e907";
+}
+.ic-double-arrow-left:before {
+  content: "\e908";
+}
+.ic-double-arrow-right:before {
+  content: "\e909";
+}
+.ic-eye:before {
+  content: "\e90a";
+}
+.ic-eye-slash:before {
+  content: "\e90b";
+}
+.ic-file:before {
+  content: "\e90c";
+}
+.ic-info-circle:before {
+  content: "\e90d";
+}
+.ic-long-arrow-left:before {
+  content: "\e90e";
+}
+.ic-plus-circle:before {
+  content: "\e90f";
+}
+.ic-search:before {
+  content: "\e910";
+}
+.ic-section:before {
+  content: "\e911";
+}
+.ic-settings:before {
+  content: "\e912";
+}
+.ic-user:before {
+  content: "\e913";
+}

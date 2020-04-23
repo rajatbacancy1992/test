@@ -1,0 +1,18 @@
+.label-md {
+  font-size: 18px;
+  color: $color-secondary;
+  line-height: 1.45;
+  margin-bottom: 14px;
+  @include respondMax(md-desktop) {
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+  @include respondMax(sm-desktop) {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  @include respondMax(md-tablet) {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+}

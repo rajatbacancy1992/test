@@ -1,7 +1,7 @@
 import React from "react"
 import {Switch,BrowserRouter,Route} from  "react-router-dom" 
-import { PublicUrl, AdminUrl } from "../Utility/constant"
-import {Login } from "../Pages/index"
+import { PublicUrl, AdminUrl, UserUrl } from "../Utility/constant"
+import {Login,ForgotPassword } from "../Pages/index"
 import {AdminSignUp} from "../Pages/Admin"
 export class Routes extends React.Component{
 
@@ -9,7 +9,7 @@ export class Routes extends React.Component{
     {
         return<>
         <BrowserRouter>
-       
+        <Route  exact path={"/"} component={Login}/>
         <AdminRoute/>
             <UserRoute/>
           
@@ -21,11 +21,9 @@ export class Routes extends React.Component{
 const UserRoute=()=>{
     return <>
      <Switch>     
-          <Route exact path={PublicUrl.home} component={()=>{
-                return(<>Landing...</>)
-            }}
-            />
+       
             <Route  exact path={PublicUrl.login} component={Login}/>
+            <Route  exact path={UserUrl.forgot_password} component={ForgotPassword}/>
     </Switch>
 
            
@@ -35,6 +33,7 @@ const AdminRoute=()=>{
     return<>
     <Switch>
     <Route  exact path={AdminUrl.signup} component={AdminSignUp}/>
+    <Route  exact path={AdminUrl.forgot_password} component={ForgotPassword}/>
    </Switch>
     </>
 }
