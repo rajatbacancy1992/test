@@ -65,7 +65,6 @@ export const ForgotPassword = () => {
   const GetOtpByEmail = () => {
     state.emailVerifyLoading = true;
     setState({ ...state });
-
     postGetOtpByEmail({ Email: Email }).then((res) => {
       if (res.error) {
         state.emailVerifyLoading = false;
