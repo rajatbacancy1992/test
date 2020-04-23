@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PublicUrl } from "../../Utility/constant";
-import { postGetOtpByEmail } from "../../Utility/Services/Login";
+import { postGetOtpByEmail, postOtpVerify } from "../../Utility/Services/Login";
 import { cloneDeep } from "lodash";
 import Input from "../../Components/Common/Input";
 import { ts, te } from "../../Utility/ReduxToaster";
@@ -16,7 +16,7 @@ const initForgotPassword = {
 export const ForgotPassword = () => {
   const [state, setState] = useState(cloneDeep(initForgotPassword));
   let { Email, errors, OTP } = state.form;
-  let { emailVerifyLoading, emailVerify } = state;
+  let { emailVerifyLoading, emailVerify, otpVerifyLoading } = state;
 
   const JqueryCode = () => {
     window.$(window).on("load", function () {
@@ -53,15 +53,36 @@ export const ForgotPassword = () => {
       window.$(this).parent().slideUp(100);
       window.$(window.$(this).attr("data-target")).slideDown();
     });
-    
   };
 
   useEffect(() => {
     JqueryCode();
-  }, []);
- const VerifyOtp=()=>{
-     alert( window.$(".js-pin-navigation").val()+"----")
- }
+  }, [emailVerify]);
+  const VerifyOtp = () => {
+    state.otpVerifyLoading = true;
+    setState({ ...state });
+    let otp = "";
+    otp += window.$(".otp-1").val();
+    otp += window.$(".otp-2").val();
+    otp += window.$(".otp-3").val();
+    otp += window.$(".otp-4").val();
+    otp += window.$(".otp-5").val();
+    otp += window.$(".otp-6").val();
+    postOtpVerify({ OTP: otp }).then((res) => {
+      if (res.error) {
+        state.otpVerifyLoading = false;
+        setState({ ...state });
+        return;
+      }
+      if (res.data.status == 200) {
+        ts(res.data.message);
+      } else {
+        te(res.data.message);
+      }
+      state.otpVerifyLoading = false;
+      setState({ ...state });
+    });
+  };
   const GetOtpByEmail = () => {
     state.emailVerifyLoading = true;
     setState({ ...state });
@@ -75,6 +96,7 @@ export const ForgotPassword = () => {
       if (res.data.status == 200) {
         ts(res.data.message);
         state.emailVerify = true;
+        
       } else {
         state.emailVerify = false;
         te(res.data.message);
@@ -156,8 +178,8 @@ export const ForgotPassword = () => {
                   <div class="form-group double">
                     <button
                       href="#!"
-                      data-target=".otp-block,.resend-otp"
-                      class="btn btn-primary btn-block text-uppercase js-show-otp-block login-button"
+                      data-target={`${".otp-block,.resend-otp"}`}
+                      class={`btn btn-primary btn-block text-uppercase ${emailVerify&&"js-show-otp-block login-button"}`}
                       onClick={() => {
                         if (Email && !errors.Email) {
                           GetOtpByEmail();
@@ -169,7 +191,7 @@ export const ForgotPassword = () => {
                     </button>
                   </div>
                 )}
-                {
+                {emailVerify && (
                   <div class="otp-block">
                     <div class="form-group">
                       <label class="label-md">OTP</label>
@@ -177,42 +199,42 @@ export const ForgotPassword = () => {
                         <div class="col">
                           <input
                             type="text"
-                            class="form-control input-pin js-pin-navigation"
+                            class="form-control input-pin js-pin-navigation otp-1"
                             maxlength="1"
                           />
                         </div>
                         <div class="col">
                           <input
                             type="text"
-                            class="form-control input-pin js-pin-navigation"
+                            class="form-control input-pin js-pin-navigation otp-2"
                             maxlength="1"
                           />
                         </div>
                         <div class="col">
                           <input
                             type="text"
-                            class="form-control input-pin js-pin-navigation"
+                            class="form-control input-pin js-pin-navigation otp-3"
                             maxlength="1"
                           />
                         </div>
                         <div class="col">
                           <input
                             type="text"
-                            class="form-control input-pin js-pin-navigation"
+                            class="form-control input-pin js-pin-navigation otp-4"
                             maxlength="1"
                           />
                         </div>
                         <div class="col">
                           <input
                             type="text"
-                            class="form-control input-pin js-pin-navigation"
+                            class="form-control input-pin js-pin-navigation otp-5"
                             maxlength="1"
                           />
                         </div>
                         <div class="col">
                           <input
                             type="text"
-                            class="form-control input-pin js-pin-navigation"
+                            class="form-control input-pin js-pin-navigation otp-6"
                             maxlength="1"
                           />
                         </div>
@@ -223,19 +245,20 @@ export const ForgotPassword = () => {
                         href="Javascript:void()"
                         class="btn btn-primary btn-block text-uppercase login-button"
                         onClick={VerifyOtp}
+                        disabled={otpVerifyLoading}
                       >
-                        Submit
+                        {otpVerifyLoading ? "Please wait..." : "Submit"}
                       </a>
                     </div>
                   </div>
-                }
+                )}
                 <div class="text-center">
-                  <a
+                  <Link
                     class="mx-auto new-user-text text-black backto-login"
-                    href="login.html"
+                  to={PublicUrl.login}
                   >
                     <ic class="ic-long-arrow-left icon"></ic> Back to Login
-                  </a>
+                  </Link>
                 </div>
               </form>
 

@@ -13,3 +13,10 @@ export const postGetOtpByEmail=(form={})=>{
     return res
 })
 }
+
+export const postOtpVerify=(form)=>{
+  return post(`/api/user/confirmotp`,form).then(res=>{
+    console.log("postOtpVerify",res)
+    return res
+})
+}
